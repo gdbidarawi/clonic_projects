@@ -1,0 +1,24 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Data files (optional: remove these lines if you want to track sample data)
+patients.txt
+doctors.txt
+appointments.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Virtual environments
+venv/
+env/
+.env
