@@ -52,10 +52,7 @@ class HospitalInventoryManager:
 
         return critical_buying, low_stock_buying
 
-
-# ==========================================
 # TESTING THE PROCUREMENT PIPELINE
-# ==========================================
 if __name__ == "__main__":
     manager = HospitalInventoryManager()
 
@@ -71,18 +68,18 @@ if __name__ == "__main__":
 
     print(f"--- HOSPITAL PROCUREMENT REPORT ({date.today()}) ---\n")
 
-    # 1. Critical Actions: Items completely absent from store layout
+    #  Critical Actions: Items completely absent from store layout
     print(" CRITICAL BUYING LIST (ZERO STOCK IN STORE - PURCHASE IMMEDIATELY):")
     if critical_purchases:
         for item in critical_purchases:
             amount_to_buy = item.min_required + 50 # Example logic: Restock to minimum tier plus a baseline cushion
-            print(f"  ❌ {item.name} (ID: {item.item_id}) -> Status: NOT FOUND | Action: Order at least {amount_to_buy} units.")
+            print(f"   {item.name} (ID: {item.item_id}) -> Status: NOT FOUND | Action: Order at least {amount_to_buy} units.")
     else:
         print("  All essential baseline materials are physically present in the store.")
 
     print("\n" + "-"*70 + "\n")
 
-    # 2. Reorder Actions: Low stock preventive warnings
+    #  Reorder Actions: Low stock preventive warnings
     print(" REORDER BUYING LIST (LOW STOCK - TO BE PURCHASED FOR REPLENISHMENT):")
     if regular_purchases:
         for item in regular_purchases:
