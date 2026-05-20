@@ -5,10 +5,6 @@ PATIENT_FILE = "patients.txt"
 APPOINTMENT_FILE = "appointments.txt"
 DOCTOR_FILE = "doctors.txt"
 
-# =========================
-# HELPERS
-# =========================
-
 def load_records(filename):
     if not os.path.exists(filename):
         return []
@@ -18,11 +14,7 @@ def load_records(filename):
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
-
-# =========================
 # DOCTOR DASHBOARD
-# =========================
-
 def doctor_dashboard():
     while True:
         clear_screen()
