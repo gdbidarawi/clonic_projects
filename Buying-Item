@@ -1,0 +1,92 @@
+from datetime import datetime, date
+
+class MedicalMaterial:
+    def __init__(self, item_id: str, name: str, batch_number: str, quantity: int, expiration_date_str: str, min_required: int = 10):
+        """
+        Represents medical supplies. 
+        min_required: The safe minimum stock level before we need to buy more.
+        """
+        self.item_id = item_id
+        self.name = name
+        self.batch_number = batch_number
+        self.quantity = quantity
+        self.min_required = min_required
+        self.expiration_date = datetime.strptime(expiration_date_str, "%Y-%m-%d").date()
+
+    def is_outdated(self) -> bool:
+        return self.expiration_date <= date.today()
+
+    def is_out_of_stock(self) -> bool:
+        """Checks if the item is completely missing from the store."""
+        return self.quantity == 0
+
+    def needs_restock(self) -> bool:
+        """Checks if stock has dipped below the safe threshold level."""
+        return self.quantity < self.min_required
+
+    def __str__(self):
+        return f"[{self.item_id}] {self.name} | Available Qty: {self.quantity} (Min Required: {self.min_required})"
+
+
+class HospitalInventoryManager:
+    def __init__(self):
+        self.inventory = {}
+
+    def add_material(self, material: MedicalMaterial):
+        self.inventory[material.item_id] = material
+
+    def get_shopping_list(self):
+        """
+        Generates a buying report categorization:
+        1. CRITICAL: Completely out of stock items.
+        2. WARNING: Low stock items needing a top-up.
+        """
+        critical_buying = []
+        low_stock_buying = []
+
+        for item in self.inventory.values():
+            if item.is_out_of_stock():
+                critical_buying.append(item)
+            elif item.needs_restock():
+                low_stock_buying.append(item)
+
+        return critical_buying, low_stock_buying
+
+
+# ==========================================
+# TESTING THE PROCUREMENT PIPELINE
+# ==========================================
+if __name__ == "__main__":
+    manager = HospitalInventoryManager()
+
+    # Injecting inventory data with items that are plenty, low, or completely empty
+    manager.add_material(MedicalMaterial("M001", "Paracetamol 500mg", "B-101", 150, "2027-12-01", min_required=20))
+    manager.add_material(MedicalMaterial("M002", "Insulin Syringes", "B-102", 0, "2028-01-01", min_required=50))    # NOT FOUND IN STORE (Qty: 0)
+    manager.add_material(MedicalMaterial("M003", "Scalpel Blades #11", "B-103", 3, "2027-05-15", min_required=15))   # LOW STOCK (Qty: 3)
+    manager.add_material(MedicalMaterial("M004", "IV Cannula 20G", "B-104", 0, "2026-11-20", min_required=30))       # NOT FOUND IN STORE (Qty: 0)
+    manager.add_material(MedicalMaterial("M005", "Defibrillator Gel", "B-105", 8, "2027-03-10", min_required=10))   # LOW STOCK (Qty: 8)
+
+    # Execute buying analysis
+    critical_purchases, regular_purchases = manager.get_shopping_list()
+
+    print(f"--- HOSPITAL PROCUREMENT REPORT ({date.today()}) ---\n")
+
+    # 1. Critical Actions: Items completely absent from store layout
+    print(" CRITICAL BUYING LIST (ZERO STOCK IN STORE - PURCHASE IMMEDIATELY):")
+    if critical_purchases:
+        for item in critical_purchases:
+            amount_to_buy = item.min_required + 50 # Example logic: Restock to minimum tier plus a baseline cushion
+            print(f"  ❌ {item.name} (ID: {item.item_id}) -> Status: NOT FOUND | Action: Order at least {amount_to_buy} units.")
+    else:
+        print("  All essential baseline materials are physically present in the store.")
+
+    print("\n" + "-"*70 + "\n")
+
+    # 2. Reorder Actions: Low stock preventive warnings
+    print(" REORDER BUYING LIST (LOW STOCK - TO BE PURCHASED FOR REPLENISHMENT):")
+    if regular_purchases:
+        for item in regular_purchases:
+            deficit = item.min_required - item.quantity
+            print(f"  🛒 {item.name} (ID: {item.item_id}) -> Current: {item.quantity} left | Action: Order {deficit} units to top up.")
+    else:
+        print("  No items currently require restocking thresholds.")
