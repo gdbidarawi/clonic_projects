@@ -3,21 +3,13 @@ import os
 PATIENT_FILE = "patients.txt"
 APPOINTMENT_FILE = "appointments.txt"
 DOCTOR_FILE = "doctors.txt"
-
-# =========================
-# CREATE FILES IF NOT EXIST
-# =========================
-
 def create_files():
     files = [PATIENT_FILE, APPOINTMENT_FILE, DOCTOR_FILE]
     for file in files:
         if not os.path.exists(file):
             open(file, 'w').close()
 
-# =========================
 # ADD PATIENT
-# =========================
-
 def add_patient():
     print("\n--- Add Patient ---")
     patient_id = input("Enter patient ID: ")
@@ -32,10 +24,7 @@ def add_patient():
         file.write(data)
 
     print("Patient added successfully.")
-
-# =========================
 # VIEW PATIENTS
-# =========================
 
 def view_patients():
     print("\n--- Patient Records ---")
@@ -56,9 +45,7 @@ def view_patients():
         print(f"Disease: {patient[4]}")
         print("----------------------")
 
-# =========================
 # ADD DOCTOR
-# =========================
 
 def add_doctor():
     print("\n--- Add Doctor ---")
@@ -73,9 +60,7 @@ def add_doctor():
 
     print("Doctor added successfully.")
 
-# =========================
 # VIEW DOCTORS
-# =========================
 
 def view_doctors():
     print("\n--- Doctor Records ---")
@@ -94,9 +79,7 @@ def view_doctors():
         print(f"Specialization: {doctor[2]}")
         print("----------------------")
 
-# =========================
 # BOOK APPOINTMENT
-# =========================
 
 def book_appointment():
     print("\n--- Book Appointment ---")
@@ -112,9 +95,7 @@ def book_appointment():
 
     print("Appointment booked successfully.")
 
-# =========================
 # VIEW APPOINTMENTS
-# =========================
 
 def view_appointments():
     print("\n--- Appointment Records ---")
@@ -134,9 +115,7 @@ def view_appointments():
         print(f"Time: {appointment[3]}")
         print("----------------------")
 
-# =========================
 # MENU
-# =========================
 
 def menu():
     while True:
@@ -169,9 +148,7 @@ def menu():
         else:
             print("Invalid choice. Please try again.")
 
-# =========================
 # MAIN PROGRAM
-# =========================
 
 if __name__ == "__main__":
     create_files()
